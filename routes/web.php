@@ -15,7 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('charge',function(){
+Route::get('charge/create',function(){
     $charge = LaraStripeCharge::setup([
                         'secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1',
                         'public_key' => 'pk_test_VNi7F1zcwwffZIi1tAkX1dVs00JfKPsCGR',
@@ -63,3 +63,62 @@ Route::get('customer/get',function(){
 
     return response()->json($cus);
 });
+
+Route::get('checkout',function(){
+    $session = LaraStripeCheckout::setup([
+                        'secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1',
+                        'public_key' => 'pk_test_VNi7F1zcwwffZIi1tAkX1dVs00JfKPsCGR',
+                        'currency'=>'usd'
+                      ])
+                      ->configure([
+                            'success_url' => 'http://127.0.0.1:8000/checkout/success?session_id={CHECKOUT_SESSION_ID}',
+                            'cancel_url' => 'http://127.0.0.1:8000',
+                            'ref_key' => 'tnx_4345623232'
+                      ])
+                      ->products([
+                          [
+                            'name' => 'Mobile',
+                            'amount' => 150,
+                            'description' => 'china mobile',
+                            'images' => ['https://cdn.pixabay.com/photo/2016/12/06/09/31/blank-1886008_960_720.png']
+                        ],
+                        [
+                            'name' => 'T-shirt',
+                            'amount' => 24.24,
+                            'quantity' => 2
+                        ]
+                      ])
+                      ->getSession();
+                      // return response()->json($session);
+    return view('checkout',['session'=>$session]);
+});
+
+Route::get('checkout/success',function(){
+    $output = LaraStripeCheckout::setup([
+                                    'secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1',
+                                    'public_key' => 'pk_test_VNi7F1zcwwffZIi1tAkX1dVs00JfKPsCGR',
+                                    'currency'=>'usd'
+                                ])
+                                ->retrieve(request('session_id'));
+    return response()->json($output);
+});
+
+Route::get('checkout/direct',function(){
+    $pkey = 'pk_test_VNi7F1zcwwffZIi1tAkX1dVs00JfKPsCGR';
+    return view('checkout-direct',['pkey'=>$pkey]);
+});
+
+Route::get('checkout/direct-pay',function(){
+    $charge = LaraStripeCharge::setup([
+                        'secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1',
+                        'public_key' => 'pk_test_VNi7F1zcwwffZIi1tAkX1dVs00JfKPsCGR',
+                        'currency'=>'usd'
+                      ])
+                      ->card(request('token'))
+                      ->amount(25.267654)
+                      ->metadata(['tnx_id' => 'tnx-32343','purchase_id' => 'trgtrg45'])
+                      ->description('kamal is here')
+                      ->purchase()
+                      ->get();
+return response()->json($charge);
+})->name('checkout.direct.pay');
