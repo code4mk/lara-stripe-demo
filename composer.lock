@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/code4mk/lara-stripe.git",
-                "reference": "f56cc544f9cbe9a0862bbd051923ebf7c40c75b3"
+                "reference": "50f045e4274d35c436619035ee31bc1ea0383386"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/code4mk/lara-stripe/zipball/f56cc544f9cbe9a0862bbd051923ebf7c40c75b3",
-                "reference": "f56cc544f9cbe9a0862bbd051923ebf7c40c75b3",
+                "url": "https://api.github.com/repos/code4mk/lara-stripe/zipball/50f045e4274d35c436619035ee31bc1ea0383386",
+                "reference": "50f045e4274d35c436619035ee31bc1ea0383386",
                 "shasum": ""
             },
             "require": {
@@ -56,7 +56,7 @@
                 "stripe",
                 "stripe-php"
             ],
-            "time": "2019-10-21T11:15:30+00:00"
+            "time": "2019-10-21T18:03:31+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",

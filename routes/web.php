@@ -40,26 +40,41 @@ Route::get('charge/refund',function(){
     return response()->json($refund);
 });
 
-Route::get('customer/create',function(){
-    $cus = LaraStripeCustomer::setup([
+
+Route::get('charge/customer',function(){
+    $charge = LaraStripeCharge::setup([
                         'secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1',
                         'public_key' => 'pk_test_VNi7F1zcwwffZIi1tAkX1dVs00JfKPsCGR',
                         'currency'=>'usd'
                       ])
-                      ->create(['source' => 'tok_visa'])
-                      ->metadata(['phone' => '212'])
+                      ->customer('cus_G2L2KoumL45hzn')
+                      ->amount(25.54567)
+                      ->metadata(['tnx_id' => 'tnx-32343','purchase_id' => 'trgtrg45'])
+                      ->description('charge with customer id ')
+                      ->purchase()
                       ->get();
+return response()->json($charge);
+});
+
+Route::get('customer/create',function(){
+    $cus = LaraStripeCustomer::setup(['secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1',])
+                              ->create(['source' => 'tok_visa','email' => 'test@test.co'])
+                              ->metadata(['phone' => '212'])
+                              ->get();
 
     return response()->json($cus);
 });
 
 Route::get('customer/get',function(){
-    $cus = LaraStripeCustomer::setup([
-                        'secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1',
-                        'public_key' => 'pk_test_VNi7F1zcwwffZIi1tAkX1dVs00JfKPsCGR',
-                        'currency'=>'usd'
-                      ])
-                      ->retrieve('cus_G23dCkE08ktOmUa');
+    $cus = LaraStripeCustomer::setup(['secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1'])
+                                ->retrieve('cus_G2L2KoumL45hzn');
+
+    return response()->json($cus);
+});
+
+Route::get('customer/change-card',function(){
+    $cus = LaraStripeCustomer::setup(['secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1'])
+                                ->changeCard('cus_G2L2KoumL45hzn','tok_amex');
 
     return response()->json($cus);
 });
@@ -68,7 +83,7 @@ Route::get('checkout',function(){
     $session = LaraStripeCheckout::setup([
                         'secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1',
                         'public_key' => 'pk_test_VNi7F1zcwwffZIi1tAkX1dVs00JfKPsCGR',
-                        'currency'=>'usd'
+                        'currency' => 'usd'
                       ])
                       ->configure([
                             'success_url' => 'http://127.0.0.1:8000/checkout/success?session_id={CHECKOUT_SESSION_ID}',
