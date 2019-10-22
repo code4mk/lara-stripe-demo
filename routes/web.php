@@ -102,6 +102,23 @@ Route::get('checkout',function(){
                         ]
                       ])
                       ->getSession();
+                      //return response()->json($session);
+    return view('checkout',['session'=>$session]);
+});
+
+Route::get('checkout/future',function(){
+    $session = LaraStripeCheckout::setup([
+                        'secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1',
+                        'public_key' => 'pk_test_VNi7F1zcwwffZIi1tAkX1dVs00JfKPsCGR',
+                        'currency' => 'usd'
+                      ])
+                      ->configure([
+                            'success_url' => 'http://127.0.0.1:8000/checkout/future/success?session_id={CHECKOUT_SESSION_ID}',
+                            'cancel_url' => 'http://127.0.0.1:8000',
+                            'ref_key' => 'tnx_4345623232_future'
+                      ])
+                      ->future()
+                      ->getSession();
                       // return response()->json($session);
     return view('checkout',['session'=>$session]);
 });
@@ -113,6 +130,16 @@ Route::get('checkout/success',function(){
                                     'currency'=>'usd'
                                 ])
                                 ->retrieve(request('session_id'));
+    return response()->json($output);
+});
+
+Route::get('checkout/future/success',function(){
+    $output = LaraStripeCheckout::setup([
+                                    'secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1',
+                                    'public_key' => 'pk_test_VNi7F1zcwwffZIi1tAkX1dVs00JfKPsCGR',
+                                    'currency'=>'usd'
+                                ])
+                                ->storeFuture(request('session_id'));
     return response()->json($output);
 });
 
