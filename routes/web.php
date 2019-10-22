@@ -33,8 +33,6 @@ return response()->json($charge);
 Route::get('charge/refund',function(){
     $refund = LaraStripeCharge::setup([
                         'secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1',
-                        'public_key' => 'pk_test_VNi7F1zcwwffZIi1tAkX1dVs00JfKPsCGR',
-                        'currency'=>'usd'
                       ])
                       ->refund('ch_1FVzAMAHZl11YnL9W7UJQd0l');
     return response()->json($refund);
@@ -57,7 +55,7 @@ return response()->json($charge);
 });
 
 Route::get('customer/create',function(){
-    $cus = LaraStripeCustomer::setup(['secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1',])
+    $cus = LaraStripeCustomer::setup(['secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1'])
                               ->create(['source' => 'tok_visa','email' => 'test@test.co'])
                               ->metadata(['phone' => '212'])
                               ->get();
