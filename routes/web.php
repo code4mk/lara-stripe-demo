@@ -137,3 +137,10 @@ Route::get('checkout/direct-pay',function(){
                       ->get();
 return response()->json($charge);
 })->name('checkout.direct.pay');
+
+Route::get('checkout/refund',function(){
+    $charge = LaraStripeCheckout::setup([
+        'secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1'
+    ])->refund('pi_1FWIACAHZl11YnL9rTSOcxNB');
+    return response()->json($charge);
+});
