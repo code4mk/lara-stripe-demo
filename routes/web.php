@@ -10,6 +10,24 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+use Code4mk\LaraStripe\StripeSubscription;
+use Code4mk\LaraStripe\StripePlans;
+
+Route::get('plan',function(){
+  $tu = new StripePlans;
+  $l = $tu->setup([
+                      'secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1'
+                    ])->amount(4000)->currency('usd')->interval('day')->product(['name'=>'sass software'])->get();
+  return response()->json($l);
+});
+Route::get('subscription',function(){
+  $r = new StripeSubscription;
+$ty = $r->setup([
+                    'secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1'
+                  ])->customer('cus_G6X5e2H0Ki2IcV')->plan('plan_G6XfOcroNkPAXA')->get();
+  return response()->json($ty);
+
+});
 
 Route::get('/', function () {
     return view('welcome');
