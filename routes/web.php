@@ -12,19 +12,86 @@
 */
 use Code4mk\LaraStripe\StripeSubscription;
 use Code4mk\LaraStripe\StripePlans;
+use Code4mk\LaraStripe\StripeCoupon;
 
-Route::get('plan',function(){
+Route::get('coupon/create',function(){
+  $l = LaraStripeCoupon::setup([
+                      'secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1'
+                    ])
+                    ->amount(20,'per','usd')
+                    ->duration('once')
+                    ->name('polo aree223')
+                    ->get();
+  return response()->json($l);
+});
+
+Route::get('coupon/delete',function(){
+  $l = LaraStripeCoupon::setup([
+                      'secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1'
+                    ])
+                    ->delete('polo_aree22');
+
+  return response()->json($l);
+});
+
+Route::get('plan/create',function(){
+  $l = LaraStripePlan::setup([
+                      'secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1'
+                    ])->amount(34.50)->currency('usd')->interval('month')->product(['name'=>'sass software buy 3'])->trial(3)->get();
+  return response()->json($l);
+});
+
+Route::get('plan/get',function(){
   $tu = new StripePlans;
   $l = $tu->setup([
                       'secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1'
-                    ])->amount(4000)->currency('usd')->interval('day')->product(['name'=>'sass software'])->get();
+                    ])->retrieve('plan_G7ZvPPExf8oNtc');
   return response()->json($l);
 });
+
+Route::get('plan/delete',function(){
+  $tu = new StripePlans;
+  $l = $tu->setup([
+                      'secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1'
+                    ])->delete('plan_G6XcGO6UREtug5');
+  return response()->json($l);
+});
+
+Route::get('plan/deactive',function(){
+  $tu = new StripePlans;
+  $l = $tu->setup([
+                      'secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1'
+                    ])->active('plan_G7aD01GTKUi2OO');
+  return response()->json($l);
+});
+
 Route::get('subscription',function(){
+  $r = new StripeSubscription;
+$ty = LaraStripeSubs::setup([
+                    'secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1'
+                  ])->customer('cus_G6X5e2H0Ki2IcV')
+                  ->plan('plan_G7xhY99PKQAhvD')
+                  ->trial(0)
+                  ->coupon('free-now')
+                  ->get();
+  return response()->json($ty);
+
+});
+
+Route::get('subscription/get',function(){
   $r = new StripeSubscription;
 $ty = $r->setup([
                     'secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1'
-                  ])->customer('cus_G6X5e2H0Ki2IcV')->plan('plan_G6XfOcroNkPAXA')->get();
+                  ])->retrieve('sub_G7y4OWjTWR7fiy');
+  return response()->json($ty);
+
+});
+
+Route::get('subscription/cancel',function(){
+  $r = new StripeSubscription;
+$ty = LaraStripeSubs::setup([
+                    'secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1'
+                  ])->cancel('sub_G7y4OWjTWR7fiy');
   return response()->json($ty);
 
 });
