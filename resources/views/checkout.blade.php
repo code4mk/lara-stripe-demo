@@ -117,14 +117,14 @@
     // When the customer clicks on the button, redirect
     // them to Checkout.
     stripe.redirectToCheckout({
-      items: [{sku: 'sku_G81IJuNDbYlJ42', quantity: 1}],
+      items: [{sku: 'sku_G82e7eOWAw2N9R', quantity: 1}],
 
       // Do not rely on the redirect to the successUrl for fulfilling
       // purchases, customers may not always reach the success_url after
       // a successful payment.
       // Instead use one of the strategies described in
       // https://stripe.com/docs/payments/checkout/fulfillment
-      successUrl: 'https://your-website.com/success',
+      successUrl: 'http://127.0.0.1:8000/checkout/success?session_id={CHECKOUT_SESSION_ID}',
       cancelUrl: 'https://your-website.com/canceled',
     })
     .then(function (result) {

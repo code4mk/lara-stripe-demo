@@ -14,6 +14,36 @@ use Code4mk\LaraStripe\StripeSubscription;
 use Code4mk\LaraStripe\StripePlans;
 use Code4mk\LaraStripe\StripeCoupon;
 
+Route::get('product/create',function(){
+    \Stripe\Stripe::setApiKey('sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1');
+    $r = \Stripe\Product::create([
+      'name' => 'T-shirt 32 hj21',
+      'type' => 'good',
+      'description' => 'Comfortable cotton t-shirt',
+      'attributes' => ['name'],
+    ]);
+//https://stripe.com/docs/api/skus/create
+    $skus = \Stripe\SKU::create([
+      'attributes' => [
+        'name' => 'T-shirt 32 hj21'
+      ],
+      'price' => 1600,
+      'currency' => 'usd',
+      'inventory' => [
+          'type' => 'infinite',
+      ],
+      'product' => $r->id,
+    ]);
+
+    $ty = (object)['product' => $r, 'skus' => $skus->id];
+
+    $u = \Stripe\PaymentIntent::retrieve(
+      'pi_1Fbn05AHZl11YnL9fhMAC73l'
+    );
+
+    return response()->json($u);
+});
+
 Route::get('coupon/create',function(){
   $l = LaraStripeCoupon::setup([
                       'secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1'
