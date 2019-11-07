@@ -271,7 +271,7 @@ Route::get('checkout/success',function(){
                                     'public_key' => 'pk_test_VNi7F1zcwwffZIi1tAkX1dVs00JfKPsCGR',
                                     'currency'=>'usd'
                                 ])
-                                ->retrieve(request('session_id'));
+                                ->status(request('session_id'));
     return response()->json($output);
 });
 
