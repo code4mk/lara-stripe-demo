@@ -13,32 +13,59 @@
 use Code4mk\LaraStripe\StripeSubscription;
 use Code4mk\LaraStripe\StripePlans;
 use Code4mk\LaraStripe\StripeCoupon;
+use Code4mk\LaraStripe\StripeRequestPayment;
+
+Route::get('payment/request/{id}',function(){
+        $rr = new StripeRequestPayment();
+        $p = $rr->setup(['secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1'])
+                            ->title('Sass project payment $50')
+                            ->description('Sass project payment @kamal')
+                            ->amount(50,'usd')
+                            ->get();
+        $pkey = 'pk_test_VNi7F1zcwwffZIi1tAkX1dVs00JfKPsCGR';
+    return view('payment-request',['id'=>request('id'),'skus'=>$p->skus,'pkey'=>$pkey]);
+});
+
+Route::get('payment/request/{id}/success',function(){
+    $rr = new StripeRequestPayment();
+    $p = $rr->setup(['secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1'])
+                        ->status(request('session_id'));
+
+    return response()->json($p);
+});
 
 Route::get('product/create',function(){
-    \Stripe\Stripe::setApiKey('sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1');
-    $r = \Stripe\Product::create([
-      'name' => 'T-shirt 32 hj21',
-      'type' => 'good',
-      'description' => 'Comfortable cotton t-shirt',
-      'attributes' => ['name'],
-    ]);
-//https://stripe.com/docs/api/skus/create
-    $skus = \Stripe\SKU::create([
-      'attributes' => [
-        'name' => 'T-shirt 32 hj21'
-      ],
-      'price' => 1600,
-      'currency' => 'usd',
-      'inventory' => [
-          'type' => 'infinite',
-      ],
-      'product' => $r->id,
-    ]);
-
-    $ty = (object)['product' => $r, 'skus' => $skus->id];
-
+//     $rr = new StripeRequestPayment();
+//     $p = $rr->setup(['secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1'])
+//                         ->title('Sass project payment $50')
+//                         ->description('Sass project payment @kamal')
+//                         ->amount(50,'usd')
+//                         ->get();
+//     return response()->json($p);
+//     \Stripe\Stripe::setApiKey('sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1');
+//     $r = \Stripe\Product::create([
+//       'name' => 'T-shirt 32 hj21',
+//       'type' => 'good',
+//       'description' => 'Comfortable cotton t-shirt',
+//       'attributes' => ['name'],
+//     ]);
+// //https://stripe.com/docs/api/skus/create
+//     $skus = \Stripe\SKU::create([
+//       'attributes' => [
+//         'name' => 'T-shirt 32 hj21'
+//       ],
+//       'price' => 1600,
+//       'currency' => 'usd',
+//       'inventory' => [
+//           'type' => 'infinite',
+//       ],
+//       'product' => $r->id,
+//     ]);
+//
+//     $ty = (object)['product' => $r, 'skus' => $skus->id];
+ \Stripe\Stripe::setApiKey('sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1');
     $u = \Stripe\PaymentIntent::retrieve(
-      'pi_1Fbn05AHZl11YnL9fhMAC73l'
+      'pi_1Fc7LBAHZl11YnL9VDcoroIc'
     );
 
     return response()->json($u);

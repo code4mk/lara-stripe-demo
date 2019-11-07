@@ -117,7 +117,7 @@
     // When the customer clicks on the button, redirect
     // them to Checkout.
     stripe.redirectToCheckout({
-      items: [{sku: 'sku_G82e7eOWAw2N9R', quantity: 1}],
+      items: [{sku: 'sku_G8O4S3PGYWMAb4', quantity: 1}],
 
       // Do not rely on the redirect to the successUrl for fulfilling
       // purchases, customers may not always reach the success_url after
