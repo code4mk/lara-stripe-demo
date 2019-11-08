@@ -16,6 +16,14 @@ use Code4mk\LaraStripe\StripeCoupon;
 use Code4mk\LaraStripe\StripeRequestPayment;
 use Code4mk\LaraStripe\StripePaymentIntent;
 
+
+Route::get('invoice', function(){
+    \Stripe\Stripe::setApiKey('sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1');
+   $r = \Stripe\Invoice::create([
+  'customer' => 'cus_G8mHZG6Nu5Gfow',
+]);
+return response()->json($r);
+});
 Route::get('paymentintent',function(){
         $rr = new StripePaymentIntent();
         $p = $rr->setup(['secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1'])
@@ -207,8 +215,8 @@ return response()->json($charge);
 
 Route::get('customer/create',function(){
     $cus = LaraStripeCustomer::setup(['secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1'])
-                              ->create(['source' => 'tok_visa','email' => 'test@test.co'])
-                              ->metadata(['phone' => '212'])
+                              ->create(['source' => 'tok_visa','email' => 'ahiremostafa@gmail.com'])
+                              ->metadata(['phone' => '21232'])
                               ->get();
 
     return response()->json($cus);
