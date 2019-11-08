@@ -10,11 +10,11 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-use Code4mk\LaraStripe\StripeSubscription;
-use Code4mk\LaraStripe\StripePlans;
-use Code4mk\LaraStripe\StripeCoupon;
-use Code4mk\LaraStripe\StripeRequestPayment;
-use Code4mk\LaraStripe\StripePaymentIntent;
+use Code4mk\LaraStripe\Lib\StripeSubscription;
+use Code4mk\LaraStripe\Lib\StripePlans;
+use Code4mk\LaraStripe\Lib\StripeCoupon;
+use Code4mk\LaraStripe\Lib\StripeRequestPayment;
+use Code4mk\LaraStripe\Lib\StripePaymentIntent;
 
 
 Route::get('invoice', function(){
