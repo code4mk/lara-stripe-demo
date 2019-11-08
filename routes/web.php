@@ -14,6 +14,15 @@ use Code4mk\LaraStripe\StripeSubscription;
 use Code4mk\LaraStripe\StripePlans;
 use Code4mk\LaraStripe\StripeCoupon;
 use Code4mk\LaraStripe\StripeRequestPayment;
+use Code4mk\LaraStripe\StripePaymentIntent;
+
+Route::get('paymentintent',function(){
+        $rr = new StripePaymentIntent();
+        $p = $rr->setup(['secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1'])
+                            ->create();
+        return view('payment-intent',['pkey' => 'pk_test_VNi7F1zcwwffZIi1tAkX1dVs00JfKPsCGR','client_secret_pi' => $p->client_secret]);
+        return response()->json($p);
+});
 
 Route::get('payment/request/{id}',function(){
         $rr = new StripeRequestPayment();
@@ -205,16 +214,43 @@ Route::get('customer/create',function(){
     return response()->json($cus);
 });
 
-Route::get('customer/get',function(){
+Route::get('customer/add-card',function(){
     $cus = LaraStripeCustomer::setup(['secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1'])
-                                ->retrieve('cus_G2L2KoumL45hzn');
+                              ->changeCard('cus_G8gpFwsMHE575v','card_1FcPVzAHZl11YnL99qRpnwaC');
+
 
     return response()->json($cus);
 });
 
-Route::get('customer/change-card',function(){
+Route::get('customer/get',function(){
     $cus = LaraStripeCustomer::setup(['secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1'])
-                                ->changeCard('cus_G2L2KoumL45hzn','tok_amex');
+                                ->retrieve('cus_G8gpFwsMHE575v');
+    return response()->json($cus);
+});
+
+Route::get('customer/cards',function(){
+    $cards = LaraStripeCustomer::setup(['secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1'])
+                                ->cards('cus_G8gpFwsMHE575v');
+    return response()->json($cards);
+});
+
+Route::get('customer/add-card',function(){
+    $cus = LaraStripeCustomer::setup(['secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1'])
+                                ->addCard('cus_G8gpFwsMHE575v','tok_visa');
+
+    return response()->json($cus);
+});
+
+Route::get('customer/delete-card',function(){
+    $cus = LaraStripeCustomer::setup(['secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1'])
+                                ->deleteCard('cus_G8gpFwsMHE575v','card_1FcQjeAHZl11YnL9F62Mwfm9');
+
+    return response()->json($cus);
+});
+
+Route::get('customer/set-default-card',function(){
+    $cus = LaraStripeCustomer::setup(['secret_key'=>'sk_test_mBGoFuccDy2KCD4pobbaixKK00qUW0ghu1'])
+                                ->setDefaultCard('cus_G8gpFwsMHE575v','card_1FcQVCAHZl11YnL9zDm2QJmz');
 
     return response()->json($cus);
 });
